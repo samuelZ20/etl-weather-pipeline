@@ -27,7 +27,7 @@ def main():
     chovendo = condicao and "chuva" in condicao.lower()
     data_hora = datetime.utcfromtimestamp(timestamp).strftime("%Y-%m-%d %H:%M:%S")
 
-    #organizar em DataFrame
+    #organizar em dataframe
     df = pd.DataFrame([{
         "cidade": cidade,
         "timestamp": timestamp,
