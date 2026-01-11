@@ -1,64 +1,52 @@
-"""
-ETAPA: EXTRACT
----------------
-Este script conecta na API do OpenWeather, coleta dados de clima da cidade de Lavras
-e salva o JSON bruto em data/raw/ para ser usado nas próximas etapas do pipeline.
-
-Padrão didático: comentários explicam cada passo.
-"""
-
-import requests        # biblioteca para fazer requisições HTTP
-import json            # para manipular e salvar JSON
-import os              # para acessar variáveis de ambiente
-from dotenv import load_dotenv  # para carregar a chave da API do arquivo .env
-from datetime import datetime   # para gerar nome de arquivo com data/hora
-
+import requests
+import json
+import os #acessar variaveis do ambiente
+from dotenv import load_dotenv #acessar API do .env
+from datetime import datetime #salvar arquivo com data e hora atual
 
 def main():
-    # 1. Carregar variáveis do arquivo .env
+    #carregar a chave API do arquivo env
     load_dotenv()
     api_key = os.getenv("OPENWEATHER_API_KEY")
 
     if not api_key:
-        raise ValueError("❌ API Key não encontrada. Verifique seu arquivo .env")
-
-    # 2. Definir parâmetros da requisição
+        raise ValueError("API Key não encontrada. Verifique seu arquivo .env")
+    
     cidade = "Lavras"
-    url = "https://api.openweathermap.org/data/2.5/weather"
+    url = "https://api.openweathermap.org/data/3.0/weather"
 
+    #montando a requisição
     params = {
-        "q": cidade,
+        "q" : cidade,
         "appid": api_key,
-        "units": "metric",   # Celsius
-        "lang": "pt_br"      # português
+        "units": "metric",
+        "long":"pt_br"
     }
 
-    # 3. Fazer a requisição
-    print(f"🔄 Coletando dados de clima para {cidade}...")
-    response = requests.get(url, params=params, timeout=10)
+    print(f"Coletando dados de clima para {cidade}...")
+    response = requests.get(url,params=params,timeout=10)
 
-    # 4. Verificar status da resposta
-    if response.status_code != 200:
-        print("❌ Erro na requisição:", response.status_code, response.text)
-        return
+    #validando a resposta
+    if response.status_code !=200:
+        print("Erro na requisição: ", response.status_code, response.text)
 
-    # 5. Converter para JSON
+    #converte para JSON
     dados = response.json()
 
-    # 6. Mostrar no terminal (formatado)
-    print("✅ Dados recebidos:")
-    print(json.dumps(dados, indent=2, ensure_ascii=False))
+    print("Dados recebidos")
+    print(json.dumps(dados,indent=2,ensure_ascii=False)) #formata bonito, com quebra de linhas
 
-    # 7. Gerar nome de arquivo com timestamp
-    data_atual = datetime.now().strftime("%Y-%m-%d_%H-%M")
-    nome_arquivo = f"data/raw/clima_lavras_{data_atual}.json"
+    #salvar o json com timestamp
+    data_atual = datetime.now().strftime("%Y- %m- %d_%H-%M")
+    nome_arquivo = f"data/raw/clima_lavras_{data_atual}.json"        
 
-    # 8. Salvar JSON bruto
+
     with open(nome_arquivo, "w", encoding="utf-8") as f:
-        json.dump(dados, f, indent=2, ensure_ascii=False)
+        json.dump(dados,f,indent=2,ensure_ascii=False)
 
-    print(f"📁 Arquivo salvo em: {nome_arquivo}")
+    print(f"Arquivo salvo em: {nome_arquivo}")
 
+#se importar esse arquivo em outro projeto, não roda automaticamente
 
 if __name__ == "__main__":
     main()
