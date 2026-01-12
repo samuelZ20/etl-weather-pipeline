@@ -39,7 +39,7 @@ def main():
         "chovendo": chovendo
     }])
 
-    #salvar em CSV
+      #salvar em CSV
     pasta_processed = "data/processed"
     os.makedirs(pasta_processed, exist_ok=True)
     arquivo_saida = os.path.join(pasta_processed, "clima_lavras.csv")
