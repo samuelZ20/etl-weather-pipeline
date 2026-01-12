@@ -12,8 +12,8 @@ cursor = conn.cursor()
 start_date = datetime(2025, 12, 12)
 end_date = datetime(2026, 1, 12)
 
-# Horários por dia
-horarios = ["06:00:00", "14:00:00", "22:00:00"]
+# Horários fixos por dia
+horarios = [6, 14, 22]  # manhã, tarde, noite
 
 # Contadores
 inseridos = 0
@@ -22,8 +22,7 @@ ignorados = 0
 current_date = start_date
 while current_date <= end_date:
     for hora in horarios:
-        dt_str = current_date.strftime("%Y-%m-%d") + " " + hora
-        dt_obj = datetime.strptime(dt_str, "%Y-%m-%d %H:%M:%S")
+        dt_obj = current_date.replace(hour=hora, minute=0, second=0)
         timestamp = int(dt_obj.timestamp())
 
         cursor.execute("""
