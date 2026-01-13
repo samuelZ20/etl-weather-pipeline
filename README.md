@@ -44,3 +44,28 @@ ETL-TEMPO-PIPELINE/
 ├── .env              # Variáveis de ambiente (Chaves de API)
 ├── requirements.txt  # Dependências do projeto
 └── run_etl.py        # Ponto de entrada oficial
+
+
+⚙️ Como Executar
+Clone o repositório:
+
+Bash
+
+git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/seu-usuario/seu-repositorio.git)
+Instale as dependências:
+
+Bash
+
+pip install -r requirements.txt
+Configure suas credenciais: Crie um arquivo .env na raiz e adicione sua chave:
+
+Snippet de código
+
+OPENWEATHER_API_KEY=sua_chave_aqui
+Execute a Pipeline:
+
+Bash
+
+python run_etl.py
+📊 Visualização de Dados
+Os dados processados estão prontos para consumo em ferramentas como Power BI, Tableau ou bibliotecas Python de visualização.
