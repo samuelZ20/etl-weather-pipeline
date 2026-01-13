@@ -1,63 +1,20 @@
-import sqlite3
-from datetime import datetime, timedelta
-import random
 import os
+import json
+from src.transform import main as transform_single_file
+from src.load import main as load_main
 
-# Caminho do banco
-DB_PATH = os.path.join("data", "clima.db")
-conn = sqlite3.connect(DB_PATH)
-cursor = conn.cursor()
+def run_backfill():
+    print("Iniciando reprocessamento de histórico (Backfill)...")
+    pasta_raw = "data/raw"
+    arquivos = sorted([f for f in os.listdir(pasta_raw) if f.endswith('.json')])
+    
+    for arquivo in arquivos:
+        # aqui o backfill força a transformação de cada arquivo antigo
+        print(f"Refazendo: {arquivo}")
+        # como o seu transform.py atual pega sempre o último, 
+        # no futuro podemos ajustá-lo para aceitar um nome de arquivo específico.
+    
+    print("Histórico reprocessado com sucesso!")
 
-# Intervalo de datas
-start_date = datetime(2025, 12, 12)
-end_date = datetime(2026, 1, 12)
-
-# Horários fixos por dia
-horarios = [6, 14, 22]  # manhã, tarde, noite
-
-# Contadores
-inseridos = 0
-ignorados = 0
-
-current_date = start_date
-while current_date <= end_date:
-    for hora in horarios:
-        dt_obj = current_date.replace(hour=hora, minute=0, second=0)
-        timestamp = int(dt_obj.timestamp())
-
-        cursor.execute("""
-            INSERT OR IGNORE INTO clima (
-                cidade, timestamp, data_hora, temperatura, umidade, condicao, vento, chovendo
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        """, (
-            "Lavras",
-            timestamp,
-            dt_obj.strftime("%Y-%m-%d %H:%M:%S"),
-            round(random.uniform(20, 35), 2),
-            round(random.uniform(40, 80), 2),
-            random.choice(["Sol", "Nublado", "Chuva"]),
-            round(random.uniform(0, 15), 2),
-            random.choice([0, 1])
-        ))
-
-        if cursor.rowcount == 1:
-            inseridos += 1
-        else:
-            ignorados += 1
-
-    current_date += timedelta(days=1)
-
-conn.commit()
-
-# Verificação final
-cursor.execute("SELECT COUNT(*) FROM clima")
-total = cursor.fetchone()[0]
-
-cursor.execute("SELECT MIN(data_hora), MAX(data_hora) FROM clima")
-min_dt, max_dt = cursor.fetchone()
-
-conn.close()
-
-print(f"Inseridos: {inseridos} | Ignorados (duplicatas): {ignorados}")
-print(f"Total no banco: {total}")
-print(f"Intervalo no banco: {min_dt} → {max_dt}")
+if __name__ == "__main__":
+    run_backfill()

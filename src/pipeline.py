@@ -1,16 +1,13 @@
-import subprocess
-
-def run_script(script_name):
-    print(f"▶️ Executando {script_name}...")
-    subprocess.run(["python", f"src/{script_name}.py"], check=True)
-    print(f"✅ {script_name} concluído.\n")
+from src.extract import main as extract_main
+from src.transform import main as transform_main
+from src.load import main as load_main
 
 def main():
-    print("🚀 Iniciando pipeline ETL completo\n")
-    run_script("extract")
-    run_script("transform")
-    run_script("load")
-    print("🎉 Pipeline finalizado com sucesso!")
+    print("--- INICIANDO PIPELINE ETL ---")
+    extract_main()
+    transform_main()
+    load_main()
+    print("--- PIPELINE FINALIZADA ---")
 
 if __name__ == "__main__":
     main()

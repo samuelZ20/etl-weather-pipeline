@@ -5,53 +5,44 @@ from datetime import datetime
 
 def main():
     pasta_raw = "data/raw"
-    arquivos = sorted(os.listdir(pasta_raw))
+    #filtrar apenas arquivos .json e ordenar
+    arquivos = sorted([f for f in os.listdir(pasta_raw) if f.endswith('.json')])
+    
     if not arquivos:
-        raise FileNotFoundError("❌ Nenhum arquivo encontrado em data/raw")
-    arquivo_entrada = os.path.join(pasta_raw, arquivos[-1])  # pega o mais recente
-    print(f"🔄 Lendo arquivo: {arquivo_entrada}")
+        print("Nenhum arquivo JSON encontrado para transformar.")
+        return
 
-    #ler o JSON
+    arquivo_entrada = os.path.join(pasta_raw, arquivos[-1])
+    print(f"Transformando o arquivo mais recente: {arquivo_entrada}")
+
     with open(arquivo_entrada, "r", encoding="utf-8") as f:
         dados = json.load(f)
 
-    #extrair campos importantes
-    cidade = dados.get("name")
-    timestamp = dados.get("dt")
-    temp = dados.get("main", {}).get("temp")
-    umidade = dados.get("main", {}).get("humidity")
-    condicao = dados.get("weather", [{}])[0].get("description")
-    vento = dados.get("wind", {}).get("speed")
+    #extração segura usando .get()
+    try:
+        df = pd.DataFrame([{
+            "cidade": dados.get("name"),
+            "timestamp": dados.get("dt"),
+            "data_hora": datetime.fromtimestamp(dados.get("dt")).strftime("%Y-%m-%d %H:%M:%S"),
+            "temperatura": dados.get("main", {}).get("temp"),
+            "umidade": dados.get("main", {}).get("humidity"),
+            "condicao": dados.get("weather", [{}])[0].get("description"),
+            "vento": dados.get("wind", {}).get("speed"),
+            "chovendo": 1 if "chuva" in dados.get("weather", [{}])[0].get("description", "").lower() else 0
+        }])
 
-    #criar colunas derivadas
-    chovendo = condicao and "chuva" in condicao.lower()
-    data_hora = datetime.utcfromtimestamp(timestamp).strftime("%Y-%m-%d %H:%M:%S")
+        pasta_processed = "data/processed"
+        os.makedirs(pasta_processed, exist_ok=True)
+        arquivo_saida = os.path.join(pasta_processed, "clima_lavras.csv")
 
-    #organizar em dataframe
-    df = pd.DataFrame([{
-        "cidade": cidade,
-        "timestamp": timestamp,
-        "data_hora": data_hora,
-        "temperatura": temp,
-        "umidade": umidade,
-        "condicao": condicao,
-        "vento": vento,
-        "chovendo": chovendo
-    }])
+        #se existir, adiciona sem cabeçalho. Se não, cria com cabeçalho.
+        hdr = not os.path.exists(arquivo_saida)
+        df.to_csv(arquivo_saida, mode="a", header=hdr, index=False, encoding="utf-8")
+        
+        print(f"Dados transformados com sucesso em {arquivo_saida}")
 
-      #salvar em CSV
-    pasta_processed = "data/processed"
-    os.makedirs(pasta_processed, exist_ok=True)
-    arquivo_saida = os.path.join(pasta_processed, "clima_lavras.csv")
-
-    #se já existir, adiciona linha; senão, cria novo
-    if os.path.exists(arquivo_saida):
-        df.to_csv(arquivo_saida, mode="a", header=False, index=False, encoding="utf-8")
-    else:
-        df.to_csv(arquivo_saida, index=False, encoding="utf-8")
-
-    print(f"✅ Dados transformados e salvos em {arquivo_saida}")
-
+    except KeyError as e:
+        print(f"Erro ao processar campos do JSON: {e}")
 
 if __name__ == "__main__":
     main()

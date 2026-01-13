@@ -1,1 +1,32 @@
-/.env
+# --- Segurança ---
+# Nunca envie sua chave da API para o GitHub
+.env
+
+# --- Python ---
+# Arquivos de cache que o Python gera sozinho
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# --- Ambientes Virtuais ---
+# Não envie a pasta do seu ambiente virtual (venv)
+venv/
+env/
+.venv/
+
+# --- Dados e Banco de Dados ---
+# Geralmente não enviamos o banco de dados final, apenas o código que o gera.
+# Mas em projetos acadêmicos, se quiser que o professor veja os dados, 
+# você pode comentar a linha abaixo com um '#'
+data/*.db
+
+# Ignorar arquivos temporários de dados se houver
+data/raw/*.json
+data/processed/*.csv
+
+# --- IDEs ---
+# Configurações específicas do seu VS Code
+.vscode/
+.idea/
+.DS_Store
