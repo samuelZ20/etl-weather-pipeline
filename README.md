@@ -51,7 +51,7 @@ Clone o repositório:
 
 Bash
 
-git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/seu-usuario/seu-repositorio.git)
+git clone [https://github.com/samuelZ20/etl-weather-pipeline.git](https://github.com/samuelZ20/etl-weather-pipeline.git)
 Instale as dependências:
 
 Bash
