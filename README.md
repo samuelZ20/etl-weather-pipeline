@@ -1,48 +1,48 @@
 ☕ Data Pipeline: Monitoramento Agroclimático Estratégico (Lavras/MG)
 📝 Visão Geral
-Este projeto implementa uma pipeline de dados End-to-End para monitoramento de variáveis climáticas críticas na cafeicultura de Lavras/MG. O sistema automatiza a ingestão de dados, aplica lógica de Feature Engineering para detecção de riscos biológicos e visualiza insights estratégicos em um dashboard profissional.
+Este projeto foi desenvolvido como um estudo prático de Engenharia de Dados, focado na construção de uma pipeline ponta a ponta (End-to-End). O sistema automatiza a coleta de dados climáticos para a região de Lavras/MG, processa indicadores agronômicos e disponibiliza alertas críticos para a cafeicultura em um dashboard interativo.
 
 🏗️ Arquitetura e Engenharia de Dados
-O projeto foi desenvolvido com foco em modularidade e automação de processos:
+O projeto prioriza a modularidade e a integridade do fluxo de dados:
 
-Ingestão de Dados: Extração automatizada via API climática utilizando Python.
+Ingestão de Dados: Script Python para extração de dados em tempo real via API OpenWeather.
 
-Pipeline de Transformação (ETL): Processamento de dados brutos com Pandas para limpeza, normalização de tipos e estruturação de séries temporais.
+ETL (Extração, Transformação e Carga): Utilização da biblioteca Pandas para limpeza, padronização e estruturação dos dados brutos em séries temporais prontas para análise.
 
-Feature Engineering: Implementação de lógica algorítmica para monitoramento de riscos agronômicos:
+Feature Engineering (Regras de Negócio): Implementação de algoritmos baseados em pesquisas agronômicas e suporte de IA para monitoramento de riscos:
 
-Risco de Ferrugem: Identificação de janelas de alta umidade (>80%) e temperatura ideal para o fungo.
+Risco de Ferrugem: Identificação de janelas climáticas favoráveis ao fungo (cruzamento de umidade >80% e faixas térmicas ideais).
 
-Estresse Térmico: Monitoramento de picos térmicos prejudiciais à produtividade do café arábica (>30°C).
+Estresse Térmico: Detecção de picos de temperatura (>30°C) prejudiciais à fisiologia do café arábica.
 
 🤖 Orquestração e Automação
-O diferencial técnico deste projeto é a sua autonomia operacional:
+A autonomia do sistema é garantida por um processo de orquestração:
 
-Orquestrador (run_etl.py): Script central que coordena a execução da pipeline de dados e o controle de qualidade.
+Orquestrador (run_etl.py): Script central que coordena a execução da pipeline e realiza verificações de qualidade.
 
-Agendamento Automático: Utilização do Windows Task Scheduler para disparar a pipeline 3x ao dia (06h, 14h, 22h), garantindo dados atualizados nos horários críticos de manejo.
+Agendamento Automático: Integração com o Windows Task Scheduler para disparar a pipeline de forma independente 3x ao dia (06h, 14h, 22h).
 
-Data Quality: Verificação automática da integridade dos dados antes da carga final no dashboard.
+📊 Visualização de Dados (BI)
+Os dados processados alimentam um dashboard no Power BI, focado em suporte à decisão:
 
-📊 Business Intelligence
-O dashboard no Power BI reflete o resultado da engenharia de dados através de:
+KPIs de Alerta: Identificação visual imediata de eventos críticos na lavoura.
 
-KPIs de Alerta Semânticos: Identificação visual imediata de eventos críticos.
+Tendência Temporal: Análise histórica da temperatura média para planejamento de manejo.
 
-Tendência Temporal: Análise da variação térmica média para suporte à decisão agronômica.
+⚙️ Configuração do Ambiente
+Clone o repositório.
 
-⚙️ Configuração
 Instale as dependências: pip install -r requirements.txt
 
-Execute o script de histórico: python -m src.backfill
+Gere o histórico inicial: python -m src.backfill
 
-Agende o run_etl.py para automação contínua.
+O dashboard está disponível na pasta /dashboard.
 
-🧠 Problemas Reais que esta Engenharia resolve:
-Eliminação de Erros Manuais: A automação via Agendador de Tarefas e o orquestrador run_etl.py eliminam a necessidade de intervenção humana, garantindo que o dado esteja sempre disponível e correto.
+Nota: Ao abrir o Power BI pela primeira vez, atualize o caminho do arquivo fonte (CSV) para a sua pasta local.
 
-Manejo Preventivo de Doenças: O algoritmo de risco de ferrugem permite que o produtor aplique defensivos apenas quando as condições climáticas favorecem o fungo, gerando economia e sustentabilidade.
+🧠 Problemas Reais Solucionados
+Monitoramento Contínuo: Substituição da coleta manual de dados por uma pipeline automatizada 24/7.
 
-Proteção de Produtividade: A detecção de estresse térmico responde se a planta parou de produzir devido ao calor excessivo, permitindo ajustes no manejo hídrico.
+Economia no Campo: O alerta de ferrugem auxilia na aplicação assertiva de defensivos, evitando desperdícios.
 
-Confiabilidade do Dado: Ao separar a pipeline da visualização e incluir verificações de qualidade, o sistema garante que o tomador de decisão nunca baseie suas ações em dados corrompidos ou em escalas erradas.
+Saúde da Planta: Identificação precisa de estresse térmico, permitindo ajustes rápidos no manejo hídrico ou sombreamento.
