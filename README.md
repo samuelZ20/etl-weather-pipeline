@@ -1,71 +1,48 @@
-# 🌦️ Pipeline ETL: Monitoramento Climático de Lavras-MG
+☕ Data Pipeline: Monitoramento Agroclimático Estratégico (Lavras/MG)
+📝 Visão Geral
+Este projeto implementa uma pipeline de dados End-to-End para monitoramento de variáveis climáticas críticas na cafeicultura de Lavras/MG. O sistema automatiza a ingestão de dados, aplica lógica de Feature Engineering para detecção de riscos biológicos e visualiza insights estratégicos em um dashboard profissional.
 
-Este projeto implementa uma pipeline de dados completa (ETL) para coletar, transformar e armazenar dados meteorológicos em tempo real da cidade de Lavras, Minas Gerais, utilizando a API da OpenWeather.
+🏗️ Arquitetura e Engenharia de Dados
+O projeto foi desenvolvido com foco em modularidade e automação de processos:
 
----
+Ingestão de Dados: Extração automatizada via API climática utilizando Python.
 
-## 🚀 Sobre o Projeto
-O objetivo deste projeto é demonstrar as capacidades de um Engenheiro de Dados em construir uma infraestrutura local robusta, garantindo a integridade dos dados, idempotência e prontidão para análise (Business Intelligence).
+Pipeline de Transformação (ETL): Processamento de dados brutos com Pandas para limpeza, normalização de tipos e estruturação de séries temporais.
 
-### 🎯 Perguntas de Negócio Resolvidas:
-- Qual a variação térmica diária em Lavras?
-- Existe correlação entre umidade e probabilidade de chuva na região?
-- Qual o status climático mais frequente (Céu limpo, nublado, chuva)?
+Feature Engineering: Implementação de lógica algorítmica para monitoramento de riscos agronômicos:
 
----
+Risco de Ferrugem: Identificação de janelas de alta umidade (>80%) e temperatura ideal para o fungo.
 
-## 🛠️ Arquitetura Técnica
+Estresse Térmico: Monitoramento de picos térmicos prejudiciais à produtividade do café arábica (>30°C).
 
-A pipeline segue o modelo modular de engenharia de dados:
+🤖 Orquestração e Automação
+O diferencial técnico deste projeto é a sua autonomia operacional:
 
-1.  **Extract (`extract.py`)**: Consumo da API OpenWeather via `requests`, salvando os dados brutos em formato JSON na camada **Raw**.
-2.  **Transform (`transform.py`)**: Limpeza de dados com `Pandas`, conversão de unidades (Kelvin para Celsius), tratamento de fuso horário e criação de flags de negócio.
-3.  **Load (`load.py`)**: Carga dos dados processados em um banco de dados **SQLite**, com lógica de desduplicação por timestamp.
-4.  **Orquestração (`run_etl.py`)**: Script mestre que gerencia a execução de todo o fluxo.
+Orquestrador (run_etl.py): Script central que coordena a execução da pipeline de dados e o controle de qualidade.
 
+Agendamento Automático: Utilização do Windows Task Scheduler para disparar a pipeline 3x ao dia (06h, 14h, 22h), garantindo dados atualizados nos horários críticos de manejo.
 
+Data Quality: Verificação automática da integridade dos dados antes da carga final no dashboard.
 
----
+📊 Business Intelligence
+O dashboard no Power BI reflete o resultado da engenharia de dados através de:
 
-## 📁 Estrutura de Pastas
-```text
-ETL-TEMPO-PIPELINE/
-├── data/
-│   ├── raw/          # Dados brutos (JSON) - Camada Bronze
-│   ├── processed/    # Dados limpos (CSV) - Camada Silver
-│   └── clima.db      # Data Warehouse local (SQLite) - Camada Gold
-├── src/              # Código fonte
-│   ├── extract.py
-│   ├── transform.py
-│   ├── load.py
-│   ├── pipeline.py
-│   ├── analyze.py    # Validação e métricas rápidas
-│   └── backfill.py   # Reprocessamento de histórico
-├── .env              # Variáveis de ambiente (Chaves de API)
-├── requirements.txt  # Dependências do projeto
-└── run_etl.py        # Ponto de entrada oficial
+KPIs de Alerta Semânticos: Identificação visual imediata de eventos críticos.
 
+Tendência Temporal: Análise da variação térmica média para suporte à decisão agronômica.
 
-⚙️ Como Executar
-Clone o repositório:
+⚙️ Configuração
+Instale as dependências: pip install -r requirements.txt
 
-Bash
+Execute o script de histórico: python -m src.backfill
 
-git clone [https://github.com/samuelZ20/etl-weather-pipeline.git](https://github.com/samuelZ20/etl-weather-pipeline.git)
-Instale as dependências:
+Agende o run_etl.py para automação contínua.
 
-Bash
+🧠 Problemas Reais que esta Engenharia resolve:
+Eliminação de Erros Manuais: A automação via Agendador de Tarefas e o orquestrador run_etl.py eliminam a necessidade de intervenção humana, garantindo que o dado esteja sempre disponível e correto.
 
-pip install -r requirements.txt
-Configure suas credenciais: Crie um arquivo .env na raiz e adicione sua chave:
+Manejo Preventivo de Doenças: O algoritmo de risco de ferrugem permite que o produtor aplique defensivos apenas quando as condições climáticas favorecem o fungo, gerando economia e sustentabilidade.
 
-Snippet de código
+Proteção de Produtividade: A detecção de estresse térmico responde se a planta parou de produzir devido ao calor excessivo, permitindo ajustes no manejo hídrico.
 
-OPENWEATHER_API_KEY=sua_chave_aqui
-Execute a Pipeline:
-
-Bash
-
-python run_etl.py
-📊 Visualização de Dados
-Os dados processados estão prontos para consumo em ferramentas como Power BI, Tableau ou bibliotecas Python de visualização.
+Confiabilidade do Dado: Ao separar a pipeline da visualização e incluir verificações de qualidade, o sistema garante que o tomador de decisão nunca baseie suas ações em dados corrompidos ou em escalas erradas.
