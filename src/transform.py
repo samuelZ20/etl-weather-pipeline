@@ -29,7 +29,7 @@ def main():
         # ferrugem do Café: Alta umidade (>80%) + Temperatura amena (18-24°C)
         risco_ferrugem = 1 if (umidade > 80 and 18 <= temp <= 24) else 0
         
-        # estresse Térmico: Café Arábica sofre acima de 30°C
+        # estresse térmico: Café Arábica sofre acima de 30°C
         estresse_termico = 1 if temp > 30 else 0
         df = pd.DataFrame([{
             "cidade": dados.get("name"),
