@@ -20,6 +20,17 @@ def main():
 
     #extração segura usando .get()
     try:
+        temp = dados.get("main", {}).get("temp")
+        umidade = dados.get("main", {}).get("humidity")
+        condicao = dados.get("weather", [{}])[0].get("description", "").lower()
+        dt_raw = dados.get("dt")
+
+        # lógica de negócio (AGRO)
+        # ferrugem do Café: Alta umidade (>80%) + Temperatura amena (18-24°C)
+        risco_ferrugem = 1 if (umidade > 80 and 18 <= temp <= 24) else 0
+        
+        # estresse Térmico: Café Arábica sofre acima de 30°C
+        estresse_termico = 1 if temp > 30 else 0
         df = pd.DataFrame([{
             "cidade": dados.get("name"),
             "timestamp": dados.get("dt"),
