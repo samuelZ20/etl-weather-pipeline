@@ -25,7 +25,7 @@ def main():
         condicao = dados.get("weather", [{}])[0].get("description", "").lower()
         dt_raw = dados.get("dt")
 
-        # lógica de negócio (AGRO)
+        # lógica de negócio
         # ferrugem do Café: Alta umidade (>80%) + Temperatura amena (18-24°C)
         risco_ferrugem = 1 if (umidade > 80 and 18 <= temp <= 24) else 0
         
